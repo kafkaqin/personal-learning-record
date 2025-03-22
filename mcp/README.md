@@ -25,6 +25,9 @@ npx -y @agentdeskai/browser-tools-server@1.2.0
 
 4.cursor配置MCP(我的cursor的版本为:0.46.11)
  配置如下图
+```bash 
+cmd /c npx -y @agentdeskai/browser-tools-mcp@1.2.0
+```
 ![image](1742632323398.png)
 
 5.验证
@@ -35,5 +38,7 @@ cursor如下图
 ![image](img.png)
 
 多种MCP工具: https://cursor.directory/mcp
+
 参考： https://browsertools.agentdesk.ai/installation#requirements
+
 mcp协议: https://docs.cursor.com/context/model-context-protocol
