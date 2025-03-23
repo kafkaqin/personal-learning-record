@@ -72,7 +72,21 @@ sudo redsocks -c /etc/redsocks.conf -p /var/run/redsocks.pid
 /var/log/redsocks.log
 ```
 配置地址iptables
+
 ```shell
+# 在 NAT 表中，容器流量经由 PREROUTING
+sudo iptables -t nat -N REDSOCKS-DOCKER
+sudo iptables -t nat -A PREROUTING -i docker0 -p tcp -j REDSOCKS-DOCKER
+# 如果有多个网桥 br-xxxx，也可以再加
+#   -A PREROUTING -i br-d65a32c6d6fc -p tcp -j REDSOCKS-DOCKER
+
+# 在 REDSOCKS-DOCKER 链中，排除本地网段等
+sudo iptables -t nat -A REDSOCKS-DOCKER -d 192.168.1.0/24 -j RETURN
+# 最后将其重定向到 redsocks 端口
+sudo iptables -t nat -A REDSOCKS-DOCKER -p tcp -j REDIRECT --to-port 12345
+
+
+
 sudo iptables -t nat -N REDSOCKS
 sudo iptables -t nat -A REDSOCKS -d 127.0.0.0/8 -j RETURN
 sudo iptables -t nat -A REDSOCKS -d 192.168.1.0/24 -j RETURN
@@ -92,3 +106,34 @@ curl ifconfig.me
 ```
 ![img_2.png](img_2.png)
 
+
+代理docker流量,安装privoxy
+```shell
+sudo apt install privoxy
+```
+修改privoxy配置
+```shell
+vim /etc/privoxy/config
+listen-address  127.0.0.1:8118
+
+# 关键：将所有 HTTP/HTTPS 流量转发到你的 SOCKS5
+forward-socks5t / 127.0.0.1:1080 .
+
+```
+重启privoxy
+```shell
+sudo systemctl restart privoxy
+```
+验证
+```shell
+curl -v --proxy http://127.0.0.1:8118 https://registry-1.docker.io/v2/
+```
+配置环境变量
+![img_3.png](img_3.png)
+```shell
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+```
+验证拉取镜像
+![img_4.png](img_4.png)
