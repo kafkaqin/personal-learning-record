@@ -137,3 +137,9 @@ sudo systemctl restart docker
 ```
 验证拉取镜像
 ![img_4.png](img_4.png)
+
+```shell
+ssh -i ~/.ssh/id_rsa -D 0.0.0.0:1080 -N -p 22 administrator@192.168.1.101
+sudo redsocks -c /etc/redsocks.conf -p /var/run/redsocks.pid
+sudo systemctl restart privoxy
+```
