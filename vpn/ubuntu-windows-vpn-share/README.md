@@ -92,6 +92,10 @@ sudo iptables -t nat -A REDSOCKS -d 127.0.0.0/8 -j RETURN
 sudo iptables -t nat -A REDSOCKS -d 192.168.1.0/24 -j RETURN
 sudo iptables -t nat -A REDSOCKS -p tcp -j REDIRECT --to-ports 12345
 sudo iptables -t nat -A OUTPUT -p tcp -j REDSOCKS
+
+# 删除
+sudo iptables -t nat -nL --line-numbers 查看链的号
+sudo iptables -t nat -D REDSOCKS 3 
 ```
 
 设置环境变量
