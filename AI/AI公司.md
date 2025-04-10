@@ -21,3 +21,5 @@ Milvus
 -- cursor 
 -- Gemeni
 -- Trae
+-- SVG模型
+-- Ten Agent + MCP
