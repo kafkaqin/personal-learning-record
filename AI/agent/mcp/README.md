@@ -13,7 +13,7 @@
 从github上安装
 git clone https://github.com/AgentDeskAI/browser-tools-mcp.git
 然后进行安装
-![image](./1742631811594.png)
+![image](1742631811594.png)
 
 2.安装nodejs(省略)
 
