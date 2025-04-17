@@ -105,3 +105,31 @@ func zhongxuv2(root *TreeNode) []int {
 	}
 	return result
 }
+
+// 层序遍历 广度优先算法
+func cengxu(root *TreeNode) [][]int {
+	queue := make([]*TreeNode, 0)
+	result := make([][]int, 0)
+	if root != nil {
+		queue = append(queue, root)
+	}
+	for len(queue) > 0 {
+		size := len(queue)
+		tmp := make([]int, size)
+		for i := 0; i < size; i++ {
+			cur := queue[i]
+			if cur != nil {
+				tmp[i] = cur.Val
+				queue = queue[1:] //出队列
+				if cur.Left != nil {
+					queue = append(queue, cur.Left)
+				}
+				if cur.Right != nil {
+					queue = append(queue, cur.Right)
+				}
+			}
+		}
+		result = append(result, tmp)
+	}
+	return result
+}
