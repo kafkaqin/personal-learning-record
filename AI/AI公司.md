@@ -19,7 +19,7 @@ Milvus
 -- 通义千问
 -- Anthropic Claude AI
 -- cursor 
--- Gemeni
+-- Gemini
 -- Trae
 -- SVG模型
 -- Ten Agent + MCP
