@@ -70,3 +70,11 @@ func main() {
 	homeTheater := NewHomeTheater()
 	homeTheater.WatchMovie()
 }
+
+/**
+不是“增加功能”，而是“简化调用”。
+
+外观模式不会封锁子系统的访问，只是提供更友好的入口。
+
+外观模式经常和中介者模式、**门面服务（service layer）**配合使用。
+*/
