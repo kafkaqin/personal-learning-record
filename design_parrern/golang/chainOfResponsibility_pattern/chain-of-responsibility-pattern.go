@@ -79,7 +79,7 @@ func main() {
 
 	req1 := &Request{Name: "张三", LeaveDay: 1}
 	req2 := &Request{Name: "李四", LeaveDay: 2}
-	req3 := &Request{Name: "王五", LeaveDay: 3}
+	req3 := &Request{Name: "王五", LeaveDay: 5}
 	leader.Handle(req1)
 	leader.Handle(req2)
 	leader.Handle(req3)
