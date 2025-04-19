@@ -155,3 +155,63 @@ func (s *CancelledState) Ship(o *Order)    { fmt.Println("订单已取消，无�
 func (s *CancelledState) Deliver(o *Order) { fmt.Println("订单已取消，无法收货") }
 func (s *CancelledState) Cancel(o *Order)  { fmt.Println("订单已取消") }
 func (s *CancelledState) GetName() string  { return "已取消" }
+
+// ======
+// type OrderStatus int
+//
+// const (
+//
+//	StatusPending OrderStatus = iota + 1
+//	StatusPaid
+//	StatusShipped
+//	StatusCompleted
+//	StatusCancelled
+//
+// )
+//
+//	type Order struct {
+//		Status OrderStatus
+//		State  OrderState
+//	}
+//
+//	func NewOrder(status OrderStatus) *Order {
+//		o := &Order{Status: status}
+//		o.State = GetStateByStatus(status)
+//		return o
+//	}
+//
+//	func (o *Order) SetState(state OrderState, status OrderStatus) {
+//		fmt.Printf("订单状态变更：%s → %s\n", o.State.GetName(), state.GetName())
+//		o.State = state
+//		o.Status = status
+//	}
+//
+// func (o *Order) Pay()     { o.State.Pay(o) }
+// func (o *Order) Ship()    { o.State.Ship(o) }
+// func (o *Order) Deliver() { o.State.Deliver(o) }
+// func (o *Order) Cancel()  { o.State.Cancel(o) }
+//
+//	func GetStateByStatus(status OrderStatus) OrderState {
+//		switch status {
+//		case StatusPending:
+//			return &PendingState{}
+//		case StatusPaid:
+//			return &PaidState{}
+//		case StatusShipped:
+//			return &ShippedState{}
+//		case StatusCompleted:
+//			return &CompletedState{}
+//		case StatusCancelled:
+//			return &CancelledState{}
+//		default:
+//			panic("未知状态")
+//		}
+//	}
+//func (s *PendingState) Pay(o *Order) {
+//	fmt.Println("支付成功")
+//	o.SetState(&PaidState{}, StatusPaid)
+//}
+//// 模拟从数据库读取
+//orderFromDB := NewOrder(StatusPaid)
+//orderFromDB.Ship()
+//orderFromDB.Deliver()
