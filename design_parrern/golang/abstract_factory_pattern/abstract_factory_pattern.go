@@ -96,6 +96,7 @@ func main() {
 	app.RenderUI()
 	var factory2 ShapeFactory
 	factory2 = &CircleFactory{}
+
 	circle := factory2.CreateShape()
 	circle.Draw()
 
