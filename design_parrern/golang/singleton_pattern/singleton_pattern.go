@@ -38,3 +38,23 @@ func main() {
 	fmt.Println("singleton1", singleton1.Data)
 	fmt.Println("singleton2", singleton2.Data)
 }
+
+type Config struct {
+	AppName string
+	Version string
+}
+
+var (
+	instanceConfig *Config
+	onceConfig     sync.Once
+)
+
+func GetConfig() *Config {
+	onceConfig.Do(func() {
+		instanceConfig = &Config{
+			AppName: "GolandProjects",
+			Version: "1.0.0",
+		}
+	})
+	return instanceConfig
+}
