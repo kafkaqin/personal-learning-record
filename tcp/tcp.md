@@ -1,0 +1,1 @@
+[Corkscrew is a tool for tunneling SSH through HTTP proxies, but... you might find another use for it.](https://github.com/qinzhao168/corkscrew)
