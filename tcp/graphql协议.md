@@ -1,0 +1,1 @@
+https://graphql.cn/code/#go
