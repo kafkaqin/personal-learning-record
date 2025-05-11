@@ -126,8 +126,9 @@ func Decrypt(base64Str, key string) (string, error) {
 	return toString(bytes), nil
 }
 func main() {
+
 	key := "enduresurv1ve"
-	data := "hello xxtea in golang!"
+	data := `{"mobile": "13657726856","password": "aa12345678","code": "8795","uuid": "b155e7f964aa46b4b505782a9468a93e","version": "2.0.0","deviceId": "17468408185848999827","equipmentModel": "android-","deviceSource": "android"}`
 
 	encrypted := Encrypt(data, key)
 	fmt.Println("Encrypted:", encrypted)
