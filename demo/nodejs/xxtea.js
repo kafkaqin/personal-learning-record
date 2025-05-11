@@ -119,3 +119,6 @@ export function decrypt(base64Str, key) {
     const bytes = fromUint32Array(decrypted, true);
     return toString(bytes);
 }
+// const key = "enduresurv1ve"
+// const data = "hello xxtea in golang!"
+// encrypt(data,key)
