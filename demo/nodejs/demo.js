@@ -3,7 +3,7 @@ const CryptoJS = require("crypto-js");
 // 固定密钥和 IV（必须 16 字节）
 const AES_KEY = CryptoJS.enc.Utf8.parse("1234123412ABCDEF");  // 或替换成真实 key
 const AES_IV = CryptoJS.enc.Utf8.parse("ABCDEF1234123412".substring(0, 16));
-
+const hexStr = "704C0B6213DBB9C4A5060FCE459E0639"
 
 const qs = require("querystring");
 const murmur = require("murmurhash3js");
@@ -51,7 +51,6 @@ const cryptoHelper = {
         return JSON.parse(decoded);
     }
 };
-console.log(cryptoHelper.decrypt("704C0B6213DBB9C4A5060FCE459E0639"))
 module.exports = cryptoHelper;
 
 /**
@@ -100,7 +99,7 @@ const XCaNonceSDK = {
      * @returns {string} x-ca-nonce 签名值
      */
     generateNonce({ path, params, timestamp, body, encryptedKeyHex, isGet = true }) {
-        const key = cryptoHelper.decrypt("704C0B6213DBB9C4A5060FCE459E0639");
+        const key = cryptoHelper.decrypt(hexStr);
         console.log(key)
         const fullPath = this.buildFullPath(path, params, isGet);
         console.log("fullPath",fullPath)
@@ -220,59 +219,6 @@ const HeaderFieldHelper = {
     }
 };
 module.exports = HeaderFieldHelper;
-
-// function getConfig(config) {
-//   // 添加 Authorization 头部
-//   config.header["Authorization"] = uni.getStorageSync("access_token");
-
-//   // 设置 x-ca-key（如 o = "91B713F1390C..."）
-//   config.header[d.pName()] = o;
-
-//   // 生成 x-ca-timestamp
-//   const timestamp = Date.now();
-//   config.header[d.tName()] = timestamp;
-
-//   // 固定版本号和客户端类型
-//   config.header["version"] = "1.1.8";
-//   config.header["Client-Type"] = "user_h5";
-
-//   // 是否启用安全加密（通过缓存判断）
-//   const isSecurity = uni.getStorageSync("isSecurity") === "1";
-
-//   // 请求方法
-//   const method = config.method.toLowerCase();
-
-//   if (method === "get") {
-//     // 把 data 转为 params（GET 请求通常用 query 参数）
-//     config.params = config.data;
-
-//     // 生成 x-ca-nonce 签名（true 表示 GET 请求）
-//     config.header[d.nName()] = r(timestamp, config, true);
-
-//     // 若有参数，拼接到 URL 上，并清空 params
-//     if (config.params) {
-//       const queryString = s(config.params); // s() 为 query 编码函数（如 serializeNestedQuery）
-//       config.url = `${config.url}?${queryString}`;
-//       config.params = {};
-//     }
-
-//     // 如果开启加密，处理 GET 请求的加密逻辑
-//     if (isSecurity) {
-//       g(config, true); // g 是加密处理器
-//     }
-
-//   } else if (["post", "put", "delete"].includes(method)) {
-//     // 生成 x-ca-nonce 签名（false 表示非 GET）
-//     config.header[d.nName()] = r(timestamp, config, false);
-
-//     // 如果开启加密，处理 POST 请求体加密逻辑
-//     if (isSecurity) {
-//       g(config, false);
-//     }
-//   }
-
-//   return config;
-// }
 
 const axios = require("axios");
 const { encrypt } = require("./xxtea");
