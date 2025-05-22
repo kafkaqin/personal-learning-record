@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FLV + HLS 播放器</title>
+  <script src="https://cdn.jsdelivr.net/npm/flv.js@latest/dist/flv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body {
+      background-color: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    video {
+      width: 80%;
+      max-width: 1000px;
+      background-color: black;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <video id="video" controls autoplay muted></video>
+
+  <div>
+    <button onclick="playStream('flv')">播放 FLV</button>
+    <button onclick="playStream('hls')">播放 HLS</button>
+  </div>
+
+  <script>
+    const video = document.getElementById('video');
+
+    // 你的直播地址
+    const flvUrl = "https://192.168.31.129:8443/sport/3677791.live.flv?liveStreamID=1925408411458658304&txSecret=5b169170dde542d98847e0a9f931c710&txTime=682EFC7C";
+    const hlsUrl = "https://192.168.31.129:8443/sport/3677791/hls.m3u8?liveStreamID=1925408411458658304&txSecret=5b169170dde542d98847e0a9f931c710&txTime=682EFC7C";
+
+    let flvPlayer = null;
+    let hls = null;
+
+    function playStream(type) {
+      if (flvPlayer) {
+        flvPlayer.destroy();
+        flvPlayer = null;
+      }
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+
+      if (type === 'flv') {
+        if (flvjs.isSupported()) {
+          flvPlayer = flvjs.createPlayer({ type: 'flv', url: flvUrl });
+          flvPlayer.attachMediaElement(video);
+          flvPlayer.load();
+          flvPlayer.play();
+        } else {
+          alert("您的浏览器不支持 FLV 播放！");
+        }
+      } else if (type === 'hls') {
+        if (Hls.isSupported()) {
+          hls = new Hls();
+          hls.loadSource(hlsUrl);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            video.play();
+          });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          // Safari fallback
+          video.src = hlsUrl;
+          video.play();
+        } else {
+          alert("您的浏览器不支持 HLS 播放！");
+        }
+      }
+    }
+
+    // 默认播放 FLV
+    playStream('flv');
+  </script>
+
+</body>
+</html>
