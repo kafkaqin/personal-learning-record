@@ -18,3 +18,7 @@ ffmpeg -re -i .\source.200kbps.768x320.flv -c copy -f flv rtmp://192.168.31.129/
 
 [zlmediakit的hls高性能之旅](https://github.com/ZLMediaKit/ZLMediaKit/wiki/zlmediakit%E7%9A%84hls%E9%AB%98%E6%80%A7%E8%83%BD%E4%B9%8B%E6%97%85)
 [播放url规则](https://github.com/zlmediakit/ZLMediaKit/wiki/%E6%92%AD%E6%94%BEurl%E8%A7%84%E5%88%99)
+
+
+#### API 
+[HTTP API](https://github.com/zlmediakit/ZLMediaKit/wiki/MediaServer%E6%94%AF%E6%8C%81%E7%9A%84HTTP-API)
