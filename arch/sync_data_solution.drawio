@@ -1,0 +1,133 @@
+<mxfile host="Electron" modified="2025-05-29T22:40:44.098Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="M3XLbjTAHLSB1HN6RngM" version="21.2.1" type="device">
+  <diagram name="第 1 页" id="jEoHvFFJDt0dpBvkjZu5">
+    <mxGraphModel dx="1863" dy="1783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-34" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;opacity=20;dashed=1;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="640" y="-120" width="380" height="680" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-33" value="" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#d5e8d4;strokeColor=#82b366;opacity=40;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="120" y="-120" width="220" height="680" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-26" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=17;textOpacity=20;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="-330" y="-80" width="220" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-1" value="数据源同步服务" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="140" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-2" value="间接写k8s mongodb数据库" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="170" y="-100" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-3" value="直接写k8s mongodb 数据库" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="160" y="520" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-4" value="境外服务器" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="680" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-5" value="Open API" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="430" y="20" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-6" value="手动触发同步" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="700" y="-80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;fontSize=17;" edge="1" parent="1" source="VyNGNSNsCgXHStXvwPBu-1" target="VyNGNSNsCgXHStXvwPBu-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="80" as="sourcePoint" />
+            <mxPoint x="440" y="30" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-8" value="数据源类型字段(data_source)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="500" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-9" value="进行校验(比对数据源)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="680" y="110" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-11" value="k8s&lt;br style=&quot;font-size: 17px;&quot;&gt;mongodb" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="930" y="30" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-12" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;fontSize=17;" edge="1" parent="1" source="VyNGNSNsCgXHStXvwPBu-4" target="VyNGNSNsCgXHStXvwPBu-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="870" y="90" as="sourcePoint" />
+            <mxPoint x="920" y="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-13" value="数据源同步服务" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="150" y="350" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-14" value="数据源1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="-280" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-15" value="竞品" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="-280" y="380" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-17" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;fontSize=17;" edge="1" parent="1" source="VyNGNSNsCgXHStXvwPBu-13" target="VyNGNSNsCgXHStXvwPBu-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="410" as="sourcePoint" />
+            <mxPoint x="970" y="370" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="960" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-18" value="国内厂商云" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="175" y="-200" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-19" value="手动触发同步" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="150" y="270" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-20" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;fontSize=17;" edge="1" parent="1" source="VyNGNSNsCgXHStXvwPBu-6" target="VyNGNSNsCgXHStXvwPBu-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="-10" as="sourcePoint" />
+            <mxPoint x="470" y="-60" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="200" y="-50" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-23" value="需要把k8s mongodb redis 通过配置域名访问" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="510" y="330" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-24" value="数据源2" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="-280" y="110" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-25" value="其他数据源..." style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=17;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="-280" y="-10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-27" value="mongodb" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="150" y="440" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-28" value="redis" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="240" y="440" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-29" value="是否需要部署k8s ?" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="340" y="460" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-30" value="解决区域域名解析的问题" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=2;fontSize=30;fontStyle=1;fontColor=#3333FF;" vertex="1" parent="1">
+          <mxGeometry x="-140" y="-350" width="650" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-35" value="境外云厂商或私有云" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;strokeWidth=2;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="735" y="-200" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-36" value="" style="endArrow=classic;html=1;rounded=0;exitX=1.008;exitY=0.762;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;strokeWidth=2;" edge="1" parent="1" source="VyNGNSNsCgXHStXvwPBu-26" target="VyNGNSNsCgXHStXvwPBu-13">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint y="400" as="sourcePoint" />
+            <mxPoint x="50" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-37" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;strokeWidth=2;" edge="1" parent="1" source="VyNGNSNsCgXHStXvwPBu-26" target="VyNGNSNsCgXHStXvwPBu-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-10" y="110" as="sourcePoint" />
+            <mxPoint x="40" y="60" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-38" value="通过(https websocket)拉取" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="-110" y="28" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VyNGNSNsCgXHStXvwPBu-39" value="通过(https websocket)拉取" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="-100" y="340" width="220" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
