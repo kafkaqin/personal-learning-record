@@ -66,3 +66,6 @@ dig @47.107.143.93 -p 53 lucksafeysmarket02.aa144.cn
 ```
 #### kubernetes
 https://help.aliyun.com/zh/ack/ack-managed-and-ack-dedicated/user-guide/configure-coredns
+
+
+https://dyrnq.com/ubuntu-update-etc-resolve-conf/
