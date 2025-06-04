@@ -64,3 +64,5 @@ Address: 183.60.255.174
 ### 或者
 dig @47.107.143.93 -p 53 lucksafeysmarket02.aa144.cn
 ```
+#### kubernetes
+https://help.aliyun.com/zh/ack/ack-managed-and-ack-dedicated/user-guide/configure-coredns
