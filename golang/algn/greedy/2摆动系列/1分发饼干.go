@@ -7,7 +7,7 @@ package main
 // 3.单调坡中有平坡
 func greety(nums []int) int {
 	result := 1
-	if len(arr) == 1 {
+	if len(nums) == 1 {
 		return result
 	}
 	prediff := 0
