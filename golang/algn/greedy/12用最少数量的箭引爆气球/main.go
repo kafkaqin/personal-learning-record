@@ -2,8 +2,6 @@ package main
 
 import "sort"
 
-// 1. 按身高排序
-// 2. 按 k 排序
 func count(ponds [][]int) int {
 	if len(ponds) == 0 {
 		return 0
