@@ -12,18 +12,22 @@ package main
 // 初始化: dp[0] = 0
 // 遍历顺序
 // 打印dp数组
-func bag01(nums []int) int {
+func bag01(nums []int) bool {
 	dp := make([]int, len(nums))
 	dp[0] = 0
 	for i := 0; i < len(nums); i++ {
 		dp[i] = 0
 	}
+	target := len(nums) / 2
 	for i := 1; i < len(nums); i++ { //物品
-		for j := len(nums) / 2; j >= nums[i]; j-- { //背包 每个物品只能使用一次 所以使用一次
+		for j := target; j >= nums[i]; j-- { //背包 每个物品只能使用一次 所以使用一次
 			dp[j] = max(dp[j], dp[j-nums[i]]+nums[i])
 		}
 	}
-	return dp[len(nums)-1]
+	if dp[target] == target {
+		return true
+	}
+	return false
 }
 
 func max(a, b int) int {
