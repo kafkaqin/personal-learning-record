@@ -24,6 +24,7 @@ print("\n删除缺失值后的数据:")
 print(df_dropped)
 
 scaler = StandardScaler()
+
 df_scaled = df_filled.copy()
 df_scaled[[
     'Age','Salary'
