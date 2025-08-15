@@ -2,7 +2,7 @@ package main
 
 // dp[i][0]持有i股票  dp[i][1] 不持有i股票
 // dp[i-1][0],-prices[i]
-// dp[i][0] = max(dp[i-1][0],-prices[i])
+// dp[i][0] = max(dp[i-1][0],dp[i-1][1]-prices[i])
 
 // dp[i-1][1],dp[i-1][0]+prices[i]
 // dp[i][1] = max(dp[i-1][1],dp[i-1][0]+prices[i])
@@ -17,7 +17,7 @@ func rebTree(prices []int) int {
 	}
 
 	for i := 1; i < lenPri; i++ {
-		dp[i][0] = max(dp[i-1][0], 0-prices[i])
+		dp[i][0] = max(dp[i-1][0], dp[i-1][1]-prices[i])
 		dp[i][1] = max(dp[i-1][1], dp[i-1][0]+prices[i])
 	}
 
