@@ -1,7 +1,7 @@
 package main
 
-// dp[i]以i为结尾的最长递增子系列的长度dp[i]
-// dp[i] = max(dp[j]+1,dp[i])
+// dp[i]以i为结尾的最长连续递增子系列的长度为dp[i]
+// dp[i] = dp[i-1]+1
 func getMaxLength(nums []int) int {
 	lenNums := len(nums)
 	dp := make([]int, lenNums)
@@ -9,13 +9,12 @@ func getMaxLength(nums []int) int {
 	for i := 0; i < lenNums; i++ {
 		dp[i] = 1
 	}
+
 	result := 0
 	for i := 1; i < lenNums; i++ {
-		for j := 0; j < i; j++ {
-			if nums[i] > nums[j] {
-				dp[i] = max(dp[i], dp[j]+1)
-				result = max(result, dp[i])
-			}
+		if nums[i] > nums[i-1] {
+			dp[i] = dp[i-1] + 1
+			result = max(result, dp[i])
 		}
 	}
 	return result
