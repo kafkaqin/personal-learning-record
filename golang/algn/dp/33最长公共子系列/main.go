@@ -10,7 +10,7 @@ func getMaxLength(str1, str2 []string) int {
 	for i := 1; i <= lenstr1; i++ {
 		dp[i][0] = 0
 	}
-	for i := 1; i <= lenstr1; i++ {
+	for i := 1; i <= lenstr2; i++ {
 		dp[0][i] = 0
 	}
 	for i := 1; i <= lenstr1; i++ {
