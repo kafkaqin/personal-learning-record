@@ -2,7 +2,7 @@ package main
 
 // dp[i][j] 以i-1为结尾的str1[i]，以j-1为结尾的str2[j]最长公共子系列的长度
 // if str1[i-1] > str2[j-1] {dp[i][j] = dp[i-1][j-1]+1}
-func getMaxLength(str1, str2 []string) int {
+func getMaxLength(str1, str2 []string) bool {
 	lenstr1 := len(str1)
 	lenstr2 := len(str2)
 	dp := make([][]int, lenstr1+1)
@@ -23,7 +23,7 @@ func getMaxLength(str1, str2 []string) int {
 
 		}
 	}
-	return dp[lenstr1][lenstr2]
+	return dp[lenstr1][lenstr2] == len(str1)
 }
 
 func max(a, b int) int {
