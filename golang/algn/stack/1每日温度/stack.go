@@ -1,4 +1,4 @@
-package _每日温度
+package main
 
 func stacks(T []int) []int {
 	stack := make([]int, len(T))
