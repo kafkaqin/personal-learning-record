@@ -15,6 +15,9 @@ func stacks(nums1 []int) int {
 			for len(stack) > 0 && nums1[i] > nums1[stack[len(stack)-1]] {
 				//mmiddleIndex := stack[len(stack)-1]
 				stack = stack[:len(stack)-1] //出栈
+				if len(stack) == 0 {
+					break
+				}
 				leftIndex := stack[len(stack)-1]
 				left := nums1[leftIndex]
 				right := nums1[i]
