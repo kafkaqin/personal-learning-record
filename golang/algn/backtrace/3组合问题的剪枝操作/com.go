@@ -10,7 +10,7 @@ func backtracing(n, k int, startIndex int) {
 		result = append(result, tmp)
 		return
 	}
-	for i := startIndex; i <= n-(k-len(path))+1; i++ {
+	for i := startIndex; i <= n-(k-len(path))+1; i++ { //剪枝
 		path = append(path, i)
 		backtracing(n, k, i+1)
 		path = path[:len(path)-1] //回溯
