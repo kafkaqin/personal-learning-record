@@ -4,6 +4,9 @@ var result [][]int
 var path []int
 
 func backtracing(targetSum, k int, sum, startIndex int) {
+	if targetSum < sum {
+		return
+	}
 	if len(path) == k {
 		if targetSum == sum {
 			tmp := make([]int, len(path))
