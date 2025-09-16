@@ -22,7 +22,7 @@ func backtracing(digits string, index int) {
 	}
 
 	//dig := digits[index] - '0'
-	dig := digits[index]
+	dig := digits[index] //index 数字的下标 	q
 	letteryx := letteryMap[string(dig)]
 	for i := 0; i < len(letteryx); i++ {
 		s = s + string(letteryx[i])
