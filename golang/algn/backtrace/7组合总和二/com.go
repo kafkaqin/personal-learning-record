@@ -18,7 +18,7 @@ func backtracing(nums []int, targetSum int, sum int, startIndex int, used []int)
 	}
 
 	for i := startIndex; i < len(nums); i++ {
-		if i > 0 && nums[i] == nums[i-1] && used[i-1] == 0 { // 1表示已用过 0表示还未使用 树层
+		if i > 0 && nums[i] == nums[i-1] && used[i-1] == 0 { // 1表示已用过 0表示还未使用 树层 ，但是树枝已使用
 			continue
 		}
 		path = append(path, nums[i])

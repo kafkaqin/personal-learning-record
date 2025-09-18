@@ -64,3 +64,43 @@ plt.plot(t_values, exact_values, 'k-', lw=2, label='Exact Solution')
 plt.legend()
 plt.grid()
 plt.savefig("exact_solution1.png")
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import ndimage
+
+def gaussian_kernel(size, sigma):
+    kernel = np.fromfunction(
+        lambda x,y:(1/(2*np.pi*sigma**2))*
+                   np.exp(-(x-size)**2/(2*sigma**2)) + (y-size)**2/(2*sigma**2),
+        (size, size)
+    )
+    return kernel/np.sum(kernel)
+
+def convolve2d(image,kernel,padding='reflect'):
+    k = kernel.shape[0]//2
+    padded = np.pad(image,k,mode=padding)
+    output = np.zeros_like(image)
+    for i in range(image.shape[0]):
+        for j in range(image.shape[1]):
+            region = padded[i:i+2*k+1,j:j+2*k+1]
+            output[i,j] = np.sum(region*kernel)
+
+    return output
+
+if __name__ == '__main__':
+    image = plt.imread('de.png')
+    if image.ndim == 3:
+        image = np.mean(image,axis=2)
+    kernel = gaussian_kernel(5,sigma=1)
+    blurred = convolve2d(image,kernel)
+    plt.figure(figsize = (10,5))
+    plt.subplot(121);
+    plt.imshow(image, cmap='gray');
+    plt.title('Original')
+    plt.subplot(122);
+    plt.imshow(blurred, cmap='gray');
+    plt.title('Gaussian Blurred')
+    plt.savefig("ffs.png")
