@@ -23,7 +23,17 @@ func backtracing(s string, startIndex int, pointSum int) {
 	}
 }
 
-func isValid(s string, left int, right int) bool { //[]
+func isValid(s string, left int, right int) bool { //[]左闭右闭区间
+	//不能以0开头
+	// 不能大于255
+	//不能包含非法字符串
 
+	if s[left] == '0' {
+		return false
+	}
+	if len(s[left:right]) > 3 {
+		return false
+	}
+	//0-9合法,其他非法
 	return true
 }
