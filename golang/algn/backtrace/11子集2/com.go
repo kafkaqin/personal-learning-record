@@ -10,7 +10,7 @@ func backtracing(nums []int, startIndex int, used []bool) {
 		return
 	}
 	for i := startIndex; i < len(nums); i++ {
-		if nums[i] == nums[i-1] && used[i-1] == false {
+		if nums[i] == nums[i-1] && used[i-1] == false { //树层去重
 			continue
 		}
 		used[i] = true
