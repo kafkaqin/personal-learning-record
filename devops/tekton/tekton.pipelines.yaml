@@ -1,0 +1,132 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"tekton.dev/v1beta1","kind":"Pipeline","metadata":{"annotations":{},"name":"pr-check-pipeline","namespace":"cicd-bitbucket"},"spec":{"finally":[{"name":"notify-completion","params":[{"name":"workspace-name","value":"$(params.workspace-name)"},{"name":"repository-name","value":"$(params.repository-name)"},{"name":"commit-hash","value":"$(params.commit-hash)"},{"name":"status","value":"$(tasks.go-lint-build-test.status)"},{"name":"key","value":"pr-$(params.pr-id)"},{"name":"name","value":"Go Lint \u0026 Test"},{"name":"url","value":"https://tekton.lengz.cc/#/namespaces/cicd-bitbucket/pipelineruns/$(context.pipelineRun.name)"}],"taskRef":{"name":"put-commit-status"}}],"params":[{"description":"Repository URL","name":"git-url"},{"description":"Commit hash to check","name":"commit-hash"},{"description":"Bitbucket PR ID","name":"pr-id"},{"description":"Bitbucket workspace name","name":"workspace-name"},{"description":"Bitbucket repository name","name":"repository-name"}],"tasks":[{"name":"notify-start","params":[{"name":"workspace-name","value":"$(params.workspace-name)"},{"name":"repository-name","value":"$(params.repository-name)"},{"name":"commit-hash","value":"$(params.commit-hash)"},{"name":"status","value":"INPROGRESS"},{"name":"key","value":"pr-$(params.pr-id)"},{"name":"name","value":"Go Lint \u0026 Test"},{"name":"url","value":"https://tekton.lengz.cc/#/namespaces/cicd-bitbucket/pipelineruns/$(context.pipelineRun.name)"}],"taskRef":{"name":"put-commit-status"}},{"name":"go-lint-build-test","params":[{"name":"git-url","value":"$(params.git-url)"},{"name":"commit-hash","value":"$(params.commit-hash)"}],"taskSpec":{"params":[{"name":"git-url"},{"name":"commit-hash"}],"steps":[{"env":[{"name":"BITBUCKET_TOKEN","valueFrom":{"secretKeyRef":{"key":"bitbucket-token","name":"cicd-bitbucket-secret"}}}],"image":"curlimages/curl:8.10.1","name":"download-source","script":"set -eux\nTMP_DIR=/tmp\nWORK_DIR=/workspace\necho \"Downloading source code from $(params.git-url) for commit $(params.commit-hash)\"\ncurl -L -u \"alibaba-lucas:$BITBUCKET_TOKEN\" \\\n  -o \"$TMP_DIR/source.zip\" \\\n  \"$(params.git-url)/get/$(params.commit-hash).zip\"\nunzip -q \"$TMP_DIR/source.zip\" -d \"$TMP_DIR\"\nSUBDIR=$(find \"$TMP_DIR\" -mindepth 1 -maxdepth 1 -type d)\nmv \"$SUBDIR\"/* \"$WORK_DIR\"/\nmv \"$SUBDIR\"/.[!.]* \"$WORK_DIR\"/ 2\u003e/dev/null || true\nls -la\n","workingDir":"/workspace"},{"env":[{"name":"GOPROXY","value":"https://nexus.lengz.cc/repository/go-proxy"},{"name":"GOSUMDB","value":"off"}],"image":"golangci/golangci-lint:v2.4.0-alpine","name":"lint-build-test","script":"go mod download\ngo mod tidy -v\nif [ -f \".golangci.yml\" ] || [ -f \".golangci.yaml\" ]; then\n  echo \"Found golangci config, running linter...\"\n  golangci-lint run ./...\nelse\n  echo \"No .golangci.yml found, skipping lint\"\nfi\n# 构建项目\ngo build ./...\n# 运行测试\n# go test -v ./...\n","workingDir":"/workspace"}]}}]}}
+
+  creationTimestamp: '2025-09-19T11:16:57Z'
+  generation: 1
+  name: pr-check-pipeline
+  namespace: cicd-bitbucket
+  resourceVersion: '12434'
+  uid: 245b1032-0560-434c-8304-192611b6f612
+spec:
+  finally:
+    - name: notify-completion
+      params:
+        - name: workspace-name
+          value: $(params.workspace-name)
+        - name: repository-name
+          value: $(params.repository-name)
+        - name: commit-hash
+          value: $(params.commit-hash)
+        - name: status
+          value: $(tasks.go-lint-build-test.status)
+        - name: key
+          value: pr-$(params.pr-id)
+        - name: name
+          value: Go Lint & Test
+        - name: url
+          value: https://tekton.lengz.cc/#/namespaces/cicd-bitbucket/pipelineruns/$(context.pipelineRun.name)
+      taskRef:
+        kind: Task
+        name: put-commit-status
+  params:
+    - description: Repository URL
+      name: git-url
+      type: string
+    - description: Commit hash to check
+      name: commit-hash
+      type: string
+    - description: Bitbucket PR ID
+      name: pr-id
+      type: string
+    - description: Bitbucket workspace name
+      name: workspace-name
+      type: string
+    - description: Bitbucket repository name
+      name: repository-name
+      type: string
+  tasks:
+    - name: notify-start
+      params:
+        - name: workspace-name
+          value: $(params.workspace-name)
+        - name: repository-name
+          value: $(params.repository-name)
+        - name: commit-hash
+          value: $(params.commit-hash)
+        - name: status
+          value: INPROGRESS
+        - name: key
+          value: pr-$(params.pr-id)
+        - name: name
+          value: Go Lint & Test
+        - name: url
+          value: https://tekton.lengz.cc/#/namespaces/cicd-bitbucket/pipelineruns/$(context.pipelineRun.name)
+      taskRef:
+        kind: Task
+        name: put-commit-status
+    - name: go-lint-build-test
+      params:
+        - name: git-url
+          value: $(params.git-url)
+        - name: commit-hash
+          value: $(params.commit-hash)
+      taskSpec:
+        metadata: {}
+        params:
+          - name: git-url
+            type: string
+          - name: commit-hash
+            type: string
+        spec: null
+        steps:
+          - computeResources: {}
+            env:
+              - name: BITBUCKET_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    key: bitbucket-token
+                    name: cicd-bitbucket-secret
+            image: curlimages/curl:8.10.1
+            name: download-source
+            script: |
+              set -eux
+              TMP_DIR=/tmp
+              WORK_DIR=/workspace
+              echo "Downloading source code from $(params.git-url) for commit $(params.commit-hash)"
+              curl -L -u "alibaba-lucas:$BITBUCKET_TOKEN" \
+                -o "$TMP_DIR/source.zip" \
+                "$(params.git-url)/get/$(params.commit-hash).zip"
+              unzip -q "$TMP_DIR/source.zip" -d "$TMP_DIR"
+              SUBDIR=$(find "$TMP_DIR" -mindepth 1 -maxdepth 1 -type d)
+              mv "$SUBDIR"/* "$WORK_DIR"/
+              mv "$SUBDIR"/.[!.]* "$WORK_DIR"/ 2>/dev/null || true
+              ls -la
+
+            workingDir: /workspace
+          - computeResources: {}
+            env:
+              - name: GOPROXY
+                value: https://nexus.lengz.cc/repository/go-proxy
+              - name: GOSUMDB
+                value: 'off'
+            image: golangci/golangci-lint:v2.4.0-alpine
+            name: lint-build-test
+            script: |
+              go mod download
+              go mod tidy -v
+              if [ -f ".golangci.yml" ] || [ -f ".golangci.yaml" ]; then
+                echo "Found golangci config, running linter..."
+                golangci-lint run ./...
+              else
+                echo "No .golangci.yml found, skipping lint"
+              fi
+              # 构建项目
+              go build ./...
+              # 运行测试
+              # go test -v ./...
+
+            workingDir: /workspace

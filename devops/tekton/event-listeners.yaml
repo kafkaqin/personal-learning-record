@@ -1,0 +1,87 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"triggers.tekton.dev/v1beta1","kind":"EventListener","metadata":{"annotations":{},"name":"bitbucket-listener","namespace":"cicd-bitbucket"},"spec":{"serviceAccountName":"tekton-triggers-sa","triggers":[{"bindings":[{"ref":"pr-check-binding"}],"interceptors":[{"params":[{"name":"filter","value":"body.pullrequest != null \u0026\u0026 \nbody.pullrequest.state == \"OPEN\" \u0026\u0026\nbody.pullrequest.destination.branch.name == \"develop\" \u0026\u0026\nbody.pullrequest.source.branch.name != \"develop\"\n"}],"ref":{"name":"cel"}}],"name":"pr-check-trigger","template":{"ref":"pr-check-template"}},{"bindings":[{"ref":"publish-binding"}],"interceptors":[{"params":[{"name":"filter","value":"body.push != null \u0026\u0026 \nbody.push.changes != null \u0026\u0026 \nbody.push.changes[0].new != null \u0026\u0026 \nbody.push.changes[0].new.type != \"tag\" \u0026\u0026\n(body.push.changes[0].new.name == \"main\" || \n body.push.changes[0].new.name == \"develop\" || \n body.push.changes[0].new.name.startsWith(\"release/\")) \u0026\u0026\n(!has(body.push.changes[0].new.target.message) || \n !body.push.changes[0].new.target.message.contains(\"[ci skip]\"))\n"}],"ref":{"name":"cel"}}],"name":"publish-trigger","template":{"ref":"publish-template"}}]}}
+
+  creationTimestamp: '2025-09-19T11:26:50Z'
+  generation: 1
+  name: bitbucket-listener
+  namespace: cicd-bitbucket
+  resourceVersion: '14058'
+  uid: 6771c132-0b6d-44cc-958e-fb9897fad34c
+spec:
+  namespaceSelector: {}
+  resources: {}
+  serviceAccountName: tekton-triggers-sa
+  triggers:
+    - bindings:
+        - kind: TriggerBinding
+          ref: pr-check-binding
+      interceptors:
+        - params:
+            - name: filter
+              value: |
+                body.pullrequest != null && 
+                body.pullrequest.state == "OPEN" &&
+                body.pullrequest.destination.branch.name == "develop" &&
+                body.pullrequest.source.branch.name != "develop"
+
+          ref:
+            kind: ClusterInterceptor
+            name: cel
+      name: pr-check-trigger
+      template:
+        ref: pr-check-template
+    - bindings:
+        - kind: TriggerBinding
+          ref: publish-binding
+      interceptors:
+        - params:
+            - name: filter
+              value: |
+                body.push != null && 
+                body.push.changes != null && 
+                body.push.changes[0].new != null && 
+                body.push.changes[0].new.type != "tag" &&
+                (body.push.changes[0].new.name == "main" || 
+                 body.push.changes[0].new.name == "develop" || 
+                 body.push.changes[0].new.name.startsWith("release/")) &&
+                (!has(body.push.changes[0].new.target.message) || 
+                 !body.push.changes[0].new.target.message.contains("[ci skip]"))
+
+          ref:
+            kind: ClusterInterceptor
+            name: cel
+      name: publish-trigger
+      template:
+        ref: publish-template
+status:
+  address:
+    url: http://el-bitbucket-listener.cicd-bitbucket.svc.lengz.local:8080
+  conditions:
+    - lastTransitionTime: '2025-09-19T11:26:51Z'
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: 'True'
+      type: Available
+    - lastTransitionTime: '2025-09-19T11:26:51Z'
+      message: Deployment exists
+      status: 'True'
+      type: Deployment
+    - lastTransitionTime: '2025-09-19T11:26:51Z'
+      message: ReplicaSet "el-bitbucket-listener-7c747967f4" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: 'True'
+      type: Progressing
+    - lastTransitionTime: '2025-09-19T11:26:51Z'
+      message: EventListener is ready
+      status: 'True'
+      type: Ready
+    - lastTransitionTime: '2025-09-19T11:26:51Z'
+      message: Service exists
+      status: 'True'
+      type: Service
+  configuration:
+    generatedName: el-bitbucket-listener

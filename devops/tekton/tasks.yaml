@@ -1,0 +1,88 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"tekton.dev/v1beta1","kind":"Task","metadata":{"annotations":{},"name":"put-commit-status","namespace":"cicd-bitbucket"},"spec":{"params":[{"description":"Bitbucket workspace name","name":"workspace-name"},{"description":"Bitbucket repository name","name":"repository-name"},{"description":"Git commit hash","name":"commit-hash"},{"description":"Build 状态 (INPROGRESS|SUCCESSFUL|FAILED|STOPPED)","name":"status"},{"description":"状态唯一 key","name":"key"},{"description":"状态显示的名字","name":"name"},{"default":"","description":"CI 运行详情链接","name":"url"}],"steps":[{"env":[{"name":"BITBUCKET_TOKEN","valueFrom":{"secretKeyRef":{"key":"bitbucket-token","name":"cicd-bitbucket-secret"}}},{"name":"BITBUCKET_USER","valueFrom":{"secretKeyRef":{"key":"bitbucket-user","name":"cicd-bitbucket-secret"}}}],"image":"curlimages/curl:8.10.1","name":"put-status","script":"set -eux\n\nAPI=\"https://api.bitbucket.org/2.0/repositories/$(params.workspace-name)/$(params.repository-name)/commit/$(params.commit-hash)/statuses/build\"\n\necho \"更新 Bitbucket 提交状态:\"\necho \"  Workspace: $(params.workspace-name)\"\necho \"  Repository: $(params.repository-name)\"\necho \"  Commit: $(params.commit-hash)\"\necho \"  Status: $(params.status)\"\necho \"  Key: $(params.key)\"\necho \"  Name: $(params.name)\"\necho \"  URL: $(params.url)\"\n\nSTATUS=\"$(params.status)\"\nif [ \"$STATUS\" = \"Succeeded\" ]; then\n  STATUS=\"SUCCESSFUL\"\nelif [ \"$STATUS\" = \"Failed\" ]; then\n  STATUS=\"FAILED\"\nelif [ \"$STATUS\" = \"None\" ]; then\n  STATUS=\"STOPPED\"\nelif [ \"$STATUS\" = \"INPROGRESS\" ]; then\n  STATUS=\"INPROGRESS\"\nfi\n\ncurl -X POST \\\n  -u \"$BITBUCKET_USER:$BITBUCKET_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -f \\\n  -d \"{\n        \\\"state\\\": \\\"$STATUS\\\",\n        \\\"key\\\": \\\"$(params.key)\\\",\n        \\\"name\\\": \\\"$(params.name)\\\",\n        \\\"url\\\": \\\"$(params.url)\\\"\n      }\" \\\n  \"$API\" || exit 1\n"}]}}
+
+  creationTimestamp: '2025-09-19T11:16:50Z'
+  generation: 5
+  name: put-commit-status
+  namespace: cicd-bitbucket
+  resourceVersion: '12903'
+  uid: 4ffef70d-c1cf-4f3b-b20c-eb51fd0c2a93
+spec:
+  params:
+    - description: Bitbucket workspace name
+      name: workspace-name
+      type: string
+    - description: Bitbucket repository name
+      name: repository-name
+      type: string
+    - description: Git commit hash
+      name: commit-hash
+      type: string
+    - description: Build 状态 (INPROGRESS|SUCCESSFUL|FAILED|STOPPED)
+      name: status
+      type: string
+    - description: 状态唯一 key
+      name: key
+      type: string
+    - description: 状态显示的名字
+      name: name
+      type: string
+    - default: ''
+      description: CI 运行详情链接
+      name: url
+      type: string
+  steps:
+    - computeResources: {}
+      env:
+        - name: BITBUCKET_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: bitbucket-token
+              name: cicd-bitbucket-secret
+        - name: BITBUCKET_USER
+          valueFrom:
+            secretKeyRef:
+              key: bitbucket-user
+              name: cicd-bitbucket-secret
+      image: curlimages/curl:8.10.1
+      name: put-status
+      script: |
+        set -eux
+        
+        API="https://api.bitbucket.org/2.0/repositories/$(params.workspace-name)/$(params.repository-name)/commit/$(params.commit-hash)/statuses/build"
+        
+        echo "更新 Bitbucket 提交状态:"
+        echo "  Workspace: $(params.workspace-name)"
+        echo "  Repository: $(params.repository-name)"
+        echo "  Commit: $(params.commit-hash)"
+        echo "  Status: $(params.status)"
+        echo "  Key: $(params.key)"
+        echo "  Name: $(params.name)"
+        echo "  URL: $(params.url)"
+        
+        STATUS="$(params.status)"
+        if [ "$STATUS" = "Succeeded" ]; then
+          STATUS="SUCCESSFUL"
+        elif [ "$STATUS" = "Failed" ]; then
+          STATUS="FAILED"
+        elif [ "$STATUS" = "None" ]; then
+          STATUS="STOPPED"
+        elif [ "$STATUS" = "INPROGRESS" ]; then
+          STATUS="INPROGRESS"
+        fi
+        
+        curl -X POST \
+          -u "$BITBUCKET_USER:$BITBUCKET_TOKEN" \
+          -H "Content-Type: application/json" \
+          -f \
+          -d "{
+                \"state\": \"$STATUS\",
+                \"key\": \"$(params.key)\",
+                \"name\": \"$(params.name)\",
+                \"url\": \"$(params.url)\"
+              }" \
+          "$API" || exit 1

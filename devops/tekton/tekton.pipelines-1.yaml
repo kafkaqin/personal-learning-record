@@ -1,0 +1,280 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"tekton.dev/v1beta1","kind":"Pipeline","metadata":{"annotations":{},"name":"publish-pipeline","namespace":"cicd-bitbucket"},"spec":{"finally":[{"name":"notify-completion","params":[{"name":"workspace-name","value":"$(params.workspace-name)"},{"name":"repository-name","value":"$(params.repository-name)"},{"name":"commit-hash","value":"$(params.commit-hash)"},{"name":"status","value":"$(tasks.release.status)"},{"name":"key","value":"publish"},{"name":"name","value":"Build \u0026 Publish"},{"name":"url","value":"https://tekton.lengz.cc/#/namespaces/cicd-bitbucket/pipelineruns/$(context.pipelineRun.name)"}],"taskRef":{"name":"put-commit-status"}}],"params":[{"name":"git-url","type":"string"},{"name":"commit-hash","type":"string"},{"name":"workspace-name","type":"string"},{"name":"repository-name","type":"string"}],"tasks":[{"name":"notify-start","params":[{"name":"workspace-name","value":"$(params.workspace-name)"},{"name":"repository-name","value":"$(params.repository-name)"},{"name":"commit-hash","value":"$(params.commit-hash)"},{"name":"status","value":"INPROGRESS"},{"name":"key","value":"publish"},{"name":"name","value":"Build \u0026 Publish"},{"name":"url","value":"https://tekton.lengz.cc/#/namespaces/cicd-bitbucket/pipelineruns/$(context.pipelineRun.name)"}],"taskRef":{"name":"put-commit-status"}},{"name":"release","params":[{"name":"git-url","value":"$(params.git-url)"},{"name":"commit-hash","value":"$(params.commit-hash)"}],"taskSpec":{"params":[{"name":"git-url","type":"string"},{"name":"commit-hash","type":"string"}],"steps":[{"env":[{"name":"GOPROXY","value":"https://nexus.lengz.cc/repository/go-proxy"},{"name":"GOSUMDB","value":"off"},{"name":"BITBUCKET_TOKEN","valueFrom":{"secretKeyRef":{"key":"bitbucket-token","name":"cicd-bitbucket-secret"}}},{"name":"BITBUCKET_USER","valueFrom":{"secretKeyRef":{"key":"bitbucket-user","name":"cicd-bitbucket-secret"}}}],"image":"google28/release-go:v0.1.0","name":"release","script":"cat \u003e ~/.netrc \u003c\u003cEOF\nmachine bitbucket.org\n  login $BITBUCKET_USER\n  password $BITBUCKET_TOKEN\nEOF\nchmod 600 ~/.netrc\n\ngit init\ngit config user.email \"ci@lengz.cc\"\ngit config user.name \"CI/CD Bot\"\n# Use git clone URL format\ngit remote add origin \"https://$BITBUCKET_USER:$BITBUCKET_TOKEN@bitbucket.org/$(params.workspace-name)/$(params.repository-name).git\"\ngit fetch origin\ngit checkout $(params.commit-hash)\n\n# 生成版本号\nCURRENT_TAG=$(git tag --points-at HEAD)\nif [ -n \"$CURRENT_TAG\" ]; then\n  echo \"Current commit already has tag(s):\"\n  echo \"$CURRENT_TAG\" | sed 's/^/  /'\n  echo \"Skipping tag creation and exiting.\"\n  exit 0\nfi\n\n# 获取当前分支的最新版本\nLATEST_VERSION=$(git describe --tags --abbrev=0 2\u003e/dev/null || echo \"\")\necho \"Latest version on current branch: $LATEST_VERSION\"\n\n# 计算下一个版本\nNEXT_VERSION=$(semver-next)\necho \"Generated next version: $NEXT_VERSION\"\n\n# 如果最新版本和下一个版本一样，跳过\nif [ \"$LATEST_VERSION\" = \"$NEXT_VERSION\" ]; then\n  echo \"Latest version ($LATEST_VERSION) is the same as next version ($NEXT_VERSION), skipping.\"\n  exit 0\nfi\n\n# 获取当前分支\nCURRENT_BRANCH=$(git branch --show-current)\nif [ -z \"$CURRENT_BRANCH\" ]; then\n  # 如果是 detached HEAD，从远程分支信息推断\n  CURRENT_BRANCH=$(git branch -r --contains HEAD | head -1 | sed 's/.*origin\\///')\n  echo \"Detected branch from remote: $CURRENT_BRANCH\"\nelse\n  echo \"Current branch: $CURRENT_BRANCH\"\nfi\n\n# 确保我们有有效的分支名\nif [ -z \"$CURRENT_BRANCH\" ] || [ \"$CURRENT_BRANCH\" = \"HEAD\" ]; then\n  echo \"Error: Cannot determine target branch for push\"\n  exit 1\nfi\n\n# 檢查.release.yaml文件\nRELEASE_CONFIG_FILE=\".release.yaml\"\necho \"Checking for release configuration file: $RELEASE_CONFIG_FILE\"\n\n# 检查.release.yaml文件是否存在\nMAIN_PATH=\"\"\nAPP_NAME=\"\"\nif [ -f \"$RELEASE_CONFIG_FILE\" ]; then\n  MAIN_PATH=$(grep -E '^\\s*main:\\s*' \"$RELEASE_CONFIG_FILE\" | sed 's/.*main:\\s*//' | tr -d ' ')\n  APP_NAME=$(grep -E '^\\s*app-name:\\s*' \"$RELEASE_CONFIG_FILE\" | sed 's/.*app-name:\\s*//' | tr -d ' ')\n  echo \"Release config - main: $MAIN_PATH, app-name: $APP_NAME\"\nfi\n\n# 如果.release.yaml文件不存在，只打tag就结束\nif [ ! -f \"$RELEASE_CONFIG_FILE\" ]; then\n  echo \"No .release.yaml configuration file found, skipping build and deployment operations.\"\n  \n  # 在当前commit上打tag\n  echo \"Creating tag: $NEXT_VERSION\"\n  git tag \"$NEXT_VERSION\"\n  git push origin \"$NEXT_VERSION\"\n  \n  echo \"Pipeline completed successfully.\"\n  exit 0\nfi\n\n# 检查必要的配置字段\nif [ -z \"$MAIN_PATH\" ] || [ -z \"$APP_NAME\" ]; then\n  echo \"Error: Missing required fields in .release.yaml (main or app-name)\"\n  exit 1\nfi\n\necho \"Proceeding with build and deployment update...\"\n\n# 根据分支确定镜像base地址\nif [ \"$CURRENT_BRANCH\" = \"main\" ]; then\n  IMAGE_BASE=\"ghcr.io/tencent-international\"\nelse\n  IMAGE_BASE=\"docker.lengz.cc/tencent-international\"\nfi\n\n# 构建镜像地址\nIMAGE_NAME=\"$IMAGE_BASE/$APP_NAME\"\nNEW_IMAGE=\"$IMAGE_NAME:$NEXT_VERSION\"\n\necho \"Image base: $IMAGE_BASE\"\necho \"App name: $APP_NAME\"\necho \"Image name: $IMAGE_NAME\"\necho \"New image: $NEW_IMAGE\"\n\ngo mod tidy -v\n\n# 使用ko编译并推送新版本镜像\necho \"Building and pushing new image version with ko...\"\necho \"Using main path from .release.yaml: $MAIN_PATH\"\nKO_DOCKER_REPO=$IMAGE_NAME ko build \"$MAIN_PATH\" --bare --push --tags=$NEXT_VERSION\n\necho \"Updating chart/Chart.yaml with new version...\"\n\n# 检查 chart/Chart.yaml 是否存在\nCHART_FILE=\"chart/Chart.yaml\"\nif [ ! -f \"$CHART_FILE\" ]; then\n  echo \"chart/Chart.yaml not found, skipping chart update and only creating tag\"\n  \n  # 在当前commit上打tag\n  echo \"Creating tag: $NEXT_VERSION\"\n  git tag \"$NEXT_VERSION\"\n  git push origin \"$NEXT_VERSION\"\n  \n  echo \"Pipeline completed successfully.\"\n  exit 0\nfi\n\n# 生成chart版本（去掉tag前面的v）\nCHART_VERSION=$(echo \"$NEXT_VERSION\" | sed 's/^v//')\n\n# 更新name、version和appVersion字段\nsed -i \"s/^name:.*/name: $APP_NAME/\" \"$CHART_FILE\"\nsed -i \"s/^version:.*/version: $CHART_VERSION/\" \"$CHART_FILE\"\nsed -i \"s/^appVersion:.*/appVersion: $NEXT_VERSION/\" \"$CHART_FILE\"\n\n# 如果appVersion字段不存在，添加它\nif ! grep -q \"^appVersion:\" \"$CHART_FILE\"; then\n  sed -i \"/^version:.*/a appVersion: $NEXT_VERSION\" \"$CHART_FILE\"\nfi\n\necho \"Updated chart/Chart.yaml with new name: $APP_NAME, version: $CHART_VERSION, appVersion: $NEXT_VERSION\"\n\n# 确保我们在正确的分支上\necho \"Ensuring we are on the correct branch: $CURRENT_BRANCH\"\nif [ \"$(git branch --show-current)\" != \"$CURRENT_BRANCH\" ]; then\n  echo \"Switching to branch: $CURRENT_BRANCH\"\n  # 创建并切换到目标分支\n  git checkout -b \"$CURRENT_BRANCH\" || git checkout \"$CURRENT_BRANCH\"\nfi\n\n# 提交更改并打tag\necho \"Committing chart changes and creating tag...\"\ngit add \"$CHART_FILE\"\ngit commit -m \"chore: Update chart version to $NEXT_VERSION [ci skip]\"\ngit tag \"$NEXT_VERSION\"\n\n# 一次性推送commit和tag\necho \"Pushing commit and tag...\"\necho \"Pushing to branch: $CURRENT_BRANCH\"\ngit push origin \"$CURRENT_BRANCH\" --tags\necho \"Chart changes and tag pushed successfully\"\n","volumeMounts":[{"mountPath":"/root/.docker","name":"docker-config","readOnly":true}],"workingDir":"/workspace"}],"volumes":[{"name":"docker-config","secret":{"items":[{"key":"config.json","path":"config.json"}],"secretName":"docker-config-secret"}}]}}]}}
+
+  creationTimestamp: '2025-09-19T11:16:50Z'
+  generation: 8
+  name: publish-pipeline
+  namespace: cicd-bitbucket
+  resourceVersion: '1106482'
+  uid: 735ba22f-bdcd-4849-99f6-beda1bd7d1ea
+spec:
+  finally:
+    - name: notify-completion
+      params:
+        - name: workspace-name
+          value: $(params.workspace-name)
+        - name: repository-name
+          value: $(params.repository-name)
+        - name: commit-hash
+          value: $(params.commit-hash)
+        - name: status
+          value: $(tasks.release.status)
+        - name: key
+          value: publish
+        - name: name
+          value: Build & Publish
+        - name: url
+          value: https://tekton.lengz.cc/#/namespaces/cicd-bitbucket/pipelineruns/$(context.pipelineRun.name)
+      taskRef:
+        kind: Task
+        name: put-commit-status
+  params:
+    - name: git-url
+      type: string
+    - name: commit-hash
+      type: string
+    - name: workspace-name
+      type: string
+    - name: repository-name
+      type: string
+  tasks:
+    - name: notify-start
+      params:
+        - name: workspace-name
+          value: $(params.workspace-name)
+        - name: repository-name
+          value: $(params.repository-name)
+        - name: commit-hash
+          value: $(params.commit-hash)
+        - name: status
+          value: INPROGRESS
+        - name: key
+          value: publish
+        - name: name
+          value: Build & Publish
+        - name: url
+          value: https://tekton.lengz.cc/#/namespaces/cicd-bitbucket/pipelineruns/$(context.pipelineRun.name)
+      taskRef:
+        kind: Task
+        name: put-commit-status
+    - name: release
+      params:
+        - name: git-url
+          value: $(params.git-url)
+        - name: commit-hash
+          value: $(params.commit-hash)
+      taskSpec:
+        metadata: {}
+        params:
+          - name: git-url
+            type: string
+          - name: commit-hash
+            type: string
+        spec: null
+        steps:
+          - computeResources: {}
+            env:
+              - name: GOPROXY
+                value: https://nexus.lengz.cc/repository/go-proxy
+              - name: GOSUMDB
+                value: 'off'
+              - name: BITBUCKET_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    key: bitbucket-token
+                    name: cicd-bitbucket-secret
+              - name: BITBUCKET_USER
+                valueFrom:
+                  secretKeyRef:
+                    key: bitbucket-user
+                    name: cicd-bitbucket-secret
+            image: google28/release-go:v0.1.0
+            name: release
+            script: |
+              cat > ~/.netrc <<EOF
+              machine bitbucket.org
+                login $BITBUCKET_USER
+                password $BITBUCKET_TOKEN
+              EOF
+              chmod 600 ~/.netrc
+              
+              git init
+              git config user.email "ci@lengz.cc"
+              git config user.name "CI/CD Bot"
+              # Use git clone URL format
+              git remote add origin "https://$BITBUCKET_USER:$BITBUCKET_TOKEN@bitbucket.org/$(params.workspace-name)/$(params.repository-name).git"
+              git fetch origin
+              git checkout $(params.commit-hash)
+              
+              # 生成版本号
+              CURRENT_TAG=$(git tag --points-at HEAD)
+              if [ -n "$CURRENT_TAG" ]; then
+                echo "Current commit already has tag(s):"
+                echo "$CURRENT_TAG" | sed 's/^/  /'
+                echo "Skipping tag creation and exiting."
+                exit 0
+              fi
+              
+              # 获取当前分支的最新版本
+              LATEST_VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+              echo "Latest version on current branch: $LATEST_VERSION"
+              
+              # 计算下一个版本
+              NEXT_VERSION=$(semver-next)
+              echo "Generated next version: $NEXT_VERSION"
+              
+              # 如果最新版本和下一个版本一样，跳过
+              if [ "$LATEST_VERSION" = "$NEXT_VERSION" ]; then
+                echo "Latest version ($LATEST_VERSION) is the same as next version ($NEXT_VERSION), skipping."
+                exit 0
+              fi
+              
+              # 获取当前分支
+              CURRENT_BRANCH=$(git branch --show-current)
+              if [ -z "$CURRENT_BRANCH" ]; then
+                # 如果是 detached HEAD，从远程分支信息推断
+                CURRENT_BRANCH=$(git branch -r --contains HEAD | head -1 | sed 's/.*origin\///')
+                echo "Detected branch from remote: $CURRENT_BRANCH"
+              else
+                echo "Current branch: $CURRENT_BRANCH"
+              fi
+              
+              # 确保我们有有效的分支名
+              if [ -z "$CURRENT_BRANCH" ] || [ "$CURRENT_BRANCH" = "HEAD" ]; then
+                echo "Error: Cannot determine target branch for push"
+                exit 1
+              fi
+              
+              # 檢查.release.yaml文件
+              RELEASE_CONFIG_FILE=".release.yaml"
+              echo "Checking for release configuration file: $RELEASE_CONFIG_FILE"
+              
+              # 检查.release.yaml文件是否存在
+              MAIN_PATH=""
+              APP_NAME=""
+              BASE_IMAGE=""
+              if [ -f "$RELEASE_CONFIG_FILE" ]; then
+                MAIN_PATH=$(grep -E '^\s*main:\s*' "$RELEASE_CONFIG_FILE" | sed 's/.*main:\s*//' | tr -d ' ')
+                APP_NAME=$(grep -E '^\s*app-name:\s*' "$RELEASE_CONFIG_FILE" | sed 's/.*app-name:\s*//' | tr -d ' ')
+                BASE_IMAGE=$(grep -E '^\s*base-image:\s*' "$RELEASE_CONFIG_FILE" | sed 's/.*base-image:\s*//' | tr -d ' ')
+                echo "Release config - main: $MAIN_PATH, app-name: $APP_NAME, base-image: $BASE_IMAGE"
+              fi
+              
+              if [ -n "$BASE_IMAGE" ]; then 
+                export KO_DEFAULTBASEIMAGE="$BASE_IMAGE"
+                echo "Using base image: $KO_DEFAULTBASEIMAGE"
+              else 
+                echo "No base-image found, skip setting KO_DEFAULTBASEIMAGE"
+              fi
+              
+              # 如果.release.yaml文件不存在，只打tag就结束
+              if [ ! -f "$RELEASE_CONFIG_FILE" ]; then
+                echo "No .release.yaml configuration file found, skipping build and deployment operations."
+              
+                # 在当前commit上打tag
+                echo "Creating tag: $NEXT_VERSION"
+                git tag "$NEXT_VERSION"
+                git push origin "$NEXT_VERSION"
+              
+                echo "Pipeline completed successfully."
+                exit 0
+              fi
+              
+              # 检查必要的配置字段
+              if [ -z "$MAIN_PATH" ] || [ -z "$APP_NAME" ]; then
+                echo "Error: Missing required fields in .release.yaml (main or app-name)"
+                exit 1
+              fi
+              
+              echo "Proceeding with build and deployment update..."
+              
+              # 根据分支确定镜像base地址
+              if [ "$CURRENT_BRANCH" = "main" ]; then
+                IMAGE_BASE="ghcr.io/tencent-international"
+              else
+                IMAGE_BASE="docker.lengz.cc/tencent-international"
+              fi
+              
+              # 构建镜像地址
+              IMAGE_NAME="$IMAGE_BASE/$APP_NAME"
+              NEW_IMAGE="$IMAGE_NAME:$NEXT_VERSION"
+              
+              echo "Image base: $IMAGE_BASE"
+              echo "App name: $APP_NAME"
+              echo "Image name: $IMAGE_NAME"
+              echo "New image: $NEW_IMAGE"
+              
+              go mod tidy -v
+              
+              # 使用ko编译并推送新版本镜像
+              echo "Building and pushing new image version with ko..."
+              echo "Using main path from .release.yaml: $MAIN_PATH"
+              KO_DOCKER_REPO=$IMAGE_NAME ko build "$MAIN_PATH" --bare --push --tags=$NEXT_VERSION
+              
+              echo "Updating chart/Chart.yaml with new version..."
+              
+              # 检查 chart/Chart.yaml 是否存在
+              CHART_FILE="chart/Chart.yaml"
+              if [ ! -f "$CHART_FILE" ]; then
+                echo "chart/Chart.yaml not found, skipping chart update and only creating tag"
+              
+                # 在当前commit上打tag
+                echo "Creating tag: $NEXT_VERSION"
+                git tag "$NEXT_VERSION"
+                git push origin "$NEXT_VERSION"
+              
+                echo "Pipeline completed successfully."
+                exit 0
+              fi
+              
+              # 生成chart版本（去掉tag前面的v）
+              CHART_VERSION=$(echo "$NEXT_VERSION" | sed 's/^v//')
+              
+              # 更新name、version和appVersion字段
+              sed -i "s/^name:.*/name: $APP_NAME/" "$CHART_FILE"
+              sed -i "s/^version:.*/version: $CHART_VERSION/" "$CHART_FILE"
+              sed -i "s/^appVersion:.*/appVersion: $NEXT_VERSION/" "$CHART_FILE"
+              
+              # 如果appVersion字段不存在，添加它
+              if ! grep -q "^appVersion:" "$CHART_FILE"; then
+                sed -i "/^version:.*/a appVersion: $NEXT_VERSION" "$CHART_FILE"
+              fi
+              
+              echo "Updated chart/Chart.yaml with new name: $APP_NAME, version: $CHART_VERSION, appVersion: $NEXT_VERSION"
+              
+              # 确保我们在正确的分支上
+              echo "Ensuring we are on the correct branch: $CURRENT_BRANCH"
+              if [ "$(git branch --show-current)" != "$CURRENT_BRANCH" ]; then
+                echo "Switching to branch: $CURRENT_BRANCH"
+                # 创建并切换到目标分支
+                git checkout -b "$CURRENT_BRANCH" || git checkout "$CURRENT_BRANCH"
+              fi
+              
+              # 提交更改并打tag
+              echo "Committing chart changes and creating tag..."
+              git add "$CHART_FILE"
+              git commit -m "chore: Update chart version to $NEXT_VERSION [ci skip]"
+              git tag "$NEXT_VERSION"
+              
+              # 一次性推送commit和tag
+              echo "Pushing commit and tag..."
+              echo "Pushing to branch: $CURRENT_BRANCH"
+              git push origin "$CURRENT_BRANCH" --tags
+              echo "Chart changes and tag pushed successfully"
+
+            volumeMounts:
+              - mountPath: /root/.docker
+                name: docker-config
+                readOnly: true
+            workingDir: /workspace
+        volumes:
+          - name: docker-config
+            secret:
+              items:
+                - key: config.json
+                  path: config.json
+              secretName: docker-config-secret

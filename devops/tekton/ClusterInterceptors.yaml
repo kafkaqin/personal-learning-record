@@ -1,0 +1,129 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: ClusterInterceptor
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"triggers.tekton.dev/v1alpha1","kind":"ClusterInterceptor","metadata":{"annotations":{},"labels":{"server/type":"https"},"name":"bitbucket"},"spec":{"clientConfig":{"service":{"name":"tekton-triggers-core-interceptors","namespace":"tekton-pipelines","path":"bitbucket","port":8443}}}}
+
+  creationTimestamp: '2025-09-19T10:06:21Z'
+  generation: 2
+  labels:
+    server/type: https
+  name: bitbucket
+  resourceVersion: '2033'
+  uid: 69283608-4af4-4076-977c-b9c7cce87cbc
+spec:
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5akNDQXB1Z0F3SUJBZ0lSQUlRSDI1dGpHY29lOVRwQjB5Q0NNMG93Q2dZSUtvWkl6ajBFQXdJd1Z6RVUKTUJJR0ExVUVDaE1MYTI1aGRHbDJaUzVrWlhZeFB6QTlCZ05WQkFNVE5uUmxhM1J2YmkxMGNtbG5aMlZ5Y3kxagpiM0psTFdsdWRHVnlZMlZ3ZEc5eWN5NTBaV3QwYjI0dGNHbHdaV3hwYm1WekxuTjJZekFnRncweU5UQTVNVGt4Ck1EQTJOVEJhR0E4eU1USTFNRGd5TmpFd01EWTFNRm93VnpFVU1CSUdBMVVFQ2hNTGEyNWhkR2wyWlM1a1pYWXgKUHpBOUJnTlZCQU1UTm5SbGEzUnZiaTEwY21sbloyVnljeTFqYjNKbExXbHVkR1Z5WTJWd2RHOXljeTUwWld0MApiMjR0Y0dsd1pXeHBibVZ6TG5OMll6QlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQTBJQUJFd3ZKTytPCmk3VDhlU215bGdlZk9RNmdodjFTSmlXb3ZmdG1NdDNzRVhMa0ZyVDQvQTlhcXNWWkp3d3lteU15L0JyTE9CS1EKckZaWTYyNVhMdFBFNTAramdnRkVNSUlCUURBT0JnTlZIUThCQWY4RUJBTUNBb1F3SFFZRFZSMGxCQll3RkFZSQpLd1lCQlFVSEF3RUdDQ3NHQVFVRkJ3TUNNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGQVpDCkhPbDI0Lyt4TE94dU5YekFLVkg0ckZEaU1JSGVCZ05WSFJFRWdkWXdnZE9DSVhSbGEzUnZiaTEwY21sbloyVnkKY3kxamIzSmxMV2x1ZEdWeVkyVndkRzl5YzRJeWRHVnJkRzl1TFhSeWFXZG5aWEp6TFdOdmNtVXRhVzUwWlhKagpaWEIwYjNKekxuUmxhM1J2Ymkxd2FYQmxiR2x1WlhPQ05uUmxhM1J2YmkxMGNtbG5aMlZ5Y3kxamIzSmxMV2x1CmRHVnlZMlZ3ZEc5eWN5NTBaV3QwYjI0dGNHbHdaV3hwYm1WekxuTjJZNEpDZEdWcmRHOXVMWFJ5YVdkblpYSnoKTFdOdmNtVXRhVzUwWlhKalpYQjBiM0p6TG5SbGEzUnZiaTF3YVhCbGJHbHVaWE11YzNaakxteGxibWQ2TG14dgpZMkZzTUFvR0NDcUdTTTQ5QkFNQ0Ewa0FNRVlDSVFDdDBYUW9aeU5iY0VIc2VzOHE3eUdxY2JDVTE0T1JtUlZNCjNUVEJzemY5VWdJaEFLZ2NURlNYeDBIY2o1SFZkSkVTNTkrR0hLcGdBdEZ5WEdDQzZpb2lIUVZECi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: tekton-triggers-core-interceptors
+      namespace: tekton-pipelines
+      path: bitbucket
+      port: 8443
+status:
+  address:
+    url: https://tekton-triggers-core-interceptors.tekton-pipelines.svc:8443/bitbucket
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: ClusterInterceptor
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"triggers.tekton.dev/v1alpha1","kind":"ClusterInterceptor","metadata":{"annotations":{},"labels":{"server/type":"https"},"name":"cel"},"spec":{"clientConfig":{"service":{"name":"tekton-triggers-core-interceptors","namespace":"tekton-pipelines","path":"cel","port":8443}}}}
+
+  creationTimestamp: '2025-09-19T10:06:20Z'
+  generation: 2
+  labels:
+    server/type: https
+  name: cel
+  resourceVersion: '2034'
+  uid: 71b8b8d2-e0ce-439e-97e8-673ab7d2791e
+spec:
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5akNDQXB1Z0F3SUJBZ0lSQUlRSDI1dGpHY29lOVRwQjB5Q0NNMG93Q2dZSUtvWkl6ajBFQXdJd1Z6RVUKTUJJR0ExVUVDaE1MYTI1aGRHbDJaUzVrWlhZeFB6QTlCZ05WQkFNVE5uUmxhM1J2YmkxMGNtbG5aMlZ5Y3kxagpiM0psTFdsdWRHVnlZMlZ3ZEc5eWN5NTBaV3QwYjI0dGNHbHdaV3hwYm1WekxuTjJZekFnRncweU5UQTVNVGt4Ck1EQTJOVEJhR0E4eU1USTFNRGd5TmpFd01EWTFNRm93VnpFVU1CSUdBMVVFQ2hNTGEyNWhkR2wyWlM1a1pYWXgKUHpBOUJnTlZCQU1UTm5SbGEzUnZiaTEwY21sbloyVnljeTFqYjNKbExXbHVkR1Z5WTJWd2RHOXljeTUwWld0MApiMjR0Y0dsd1pXeHBibVZ6TG5OMll6QlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQTBJQUJFd3ZKTytPCmk3VDhlU215bGdlZk9RNmdodjFTSmlXb3ZmdG1NdDNzRVhMa0ZyVDQvQTlhcXNWWkp3d3lteU15L0JyTE9CS1EKckZaWTYyNVhMdFBFNTAramdnRkVNSUlCUURBT0JnTlZIUThCQWY4RUJBTUNBb1F3SFFZRFZSMGxCQll3RkFZSQpLd1lCQlFVSEF3RUdDQ3NHQVFVRkJ3TUNNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGQVpDCkhPbDI0Lyt4TE94dU5YekFLVkg0ckZEaU1JSGVCZ05WSFJFRWdkWXdnZE9DSVhSbGEzUnZiaTEwY21sbloyVnkKY3kxamIzSmxMV2x1ZEdWeVkyVndkRzl5YzRJeWRHVnJkRzl1TFhSeWFXZG5aWEp6TFdOdmNtVXRhVzUwWlhKagpaWEIwYjNKekxuUmxhM1J2Ymkxd2FYQmxiR2x1WlhPQ05uUmxhM1J2YmkxMGNtbG5aMlZ5Y3kxamIzSmxMV2x1CmRHVnlZMlZ3ZEc5eWN5NTBaV3QwYjI0dGNHbHdaV3hwYm1WekxuTjJZNEpDZEdWcmRHOXVMWFJ5YVdkblpYSnoKTFdOdmNtVXRhVzUwWlhKalpYQjBiM0p6TG5SbGEzUnZiaTF3YVhCbGJHbHVaWE11YzNaakxteGxibWQ2TG14dgpZMkZzTUFvR0NDcUdTTTQ5QkFNQ0Ewa0FNRVlDSVFDdDBYUW9aeU5iY0VIc2VzOHE3eUdxY2JDVTE0T1JtUlZNCjNUVEJzemY5VWdJaEFLZ2NURlNYeDBIY2o1SFZkSkVTNTkrR0hLcGdBdEZ5WEdDQzZpb2lIUVZECi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: tekton-triggers-core-interceptors
+      namespace: tekton-pipelines
+      path: cel
+      port: 8443
+status:
+  address:
+    url: https://tekton-triggers-core-interceptors.tekton-pipelines.svc:8443/cel
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: ClusterInterceptor
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"triggers.tekton.dev/v1alpha1","kind":"ClusterInterceptor","metadata":{"annotations":{},"labels":{"server/type":"https"},"name":"github"},"spec":{"clientConfig":{"service":{"name":"tekton-triggers-core-interceptors","namespace":"tekton-pipelines","path":"github","port":8443}}}}
+
+  creationTimestamp: '2025-09-19T10:06:21Z'
+  generation: 2
+  labels:
+    server/type: https
+  name: github
+  resourceVersion: '2038'
+  uid: 1548bc84-58b6-4f8c-9d57-c967dc8c5304
+spec:
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5akNDQXB1Z0F3SUJBZ0lSQUlRSDI1dGpHY29lOVRwQjB5Q0NNMG93Q2dZSUtvWkl6ajBFQXdJd1Z6RVUKTUJJR0ExVUVDaE1MYTI1aGRHbDJaUzVrWlhZeFB6QTlCZ05WQkFNVE5uUmxhM1J2YmkxMGNtbG5aMlZ5Y3kxagpiM0psTFdsdWRHVnlZMlZ3ZEc5eWN5NTBaV3QwYjI0dGNHbHdaV3hwYm1WekxuTjJZekFnRncweU5UQTVNVGt4Ck1EQTJOVEJhR0E4eU1USTFNRGd5TmpFd01EWTFNRm93VnpFVU1CSUdBMVVFQ2hNTGEyNWhkR2wyWlM1a1pYWXgKUHpBOUJnTlZCQU1UTm5SbGEzUnZiaTEwY21sbloyVnljeTFqYjNKbExXbHVkR1Z5WTJWd2RHOXljeTUwWld0MApiMjR0Y0dsd1pXeHBibVZ6TG5OMll6QlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQTBJQUJFd3ZKTytPCmk3VDhlU215bGdlZk9RNmdodjFTSmlXb3ZmdG1NdDNzRVhMa0ZyVDQvQTlhcXNWWkp3d3lteU15L0JyTE9CS1EKckZaWTYyNVhMdFBFNTAramdnRkVNSUlCUURBT0JnTlZIUThCQWY4RUJBTUNBb1F3SFFZRFZSMGxCQll3RkFZSQpLd1lCQlFVSEF3RUdDQ3NHQVFVRkJ3TUNNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGQVpDCkhPbDI0Lyt4TE94dU5YekFLVkg0ckZEaU1JSGVCZ05WSFJFRWdkWXdnZE9DSVhSbGEzUnZiaTEwY21sbloyVnkKY3kxamIzSmxMV2x1ZEdWeVkyVndkRzl5YzRJeWRHVnJkRzl1TFhSeWFXZG5aWEp6TFdOdmNtVXRhVzUwWlhKagpaWEIwYjNKekxuUmxhM1J2Ymkxd2FYQmxiR2x1WlhPQ05uUmxhM1J2YmkxMGNtbG5aMlZ5Y3kxamIzSmxMV2x1CmRHVnlZMlZ3ZEc5eWN5NTBaV3QwYjI0dGNHbHdaV3hwYm1WekxuTjJZNEpDZEdWcmRHOXVMWFJ5YVdkblpYSnoKTFdOdmNtVXRhVzUwWlhKalpYQjBiM0p6TG5SbGEzUnZiaTF3YVhCbGJHbHVaWE11YzNaakxteGxibWQ2TG14dgpZMkZzTUFvR0NDcUdTTTQ5QkFNQ0Ewa0FNRVlDSVFDdDBYUW9aeU5iY0VIc2VzOHE3eUdxY2JDVTE0T1JtUlZNCjNUVEJzemY5VWdJaEFLZ2NURlNYeDBIY2o1SFZkSkVTNTkrR0hLcGdBdEZ5WEdDQzZpb2lIUVZECi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: tekton-triggers-core-interceptors
+      namespace: tekton-pipelines
+      path: github
+      port: 8443
+status:
+  address:
+    url: https://tekton-triggers-core-interceptors.tekton-pipelines.svc:8443/github
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: ClusterInterceptor
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"triggers.tekton.dev/v1alpha1","kind":"ClusterInterceptor","metadata":{"annotations":{},"labels":{"server/type":"https"},"name":"gitlab"},"spec":{"clientConfig":{"service":{"name":"tekton-triggers-core-interceptors","namespace":"tekton-pipelines","path":"gitlab","port":8443}}}}
+
+  creationTimestamp: '2025-09-19T10:06:21Z'
+  generation: 2
+  labels:
+    server/type: https
+  name: gitlab
+  resourceVersion: '2039'
+  uid: c5df1a88-e88e-4168-8b41-9a5b85c8d899
+spec:
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5akNDQXB1Z0F3SUJBZ0lSQUlRSDI1dGpHY29lOVRwQjB5Q0NNMG93Q2dZSUtvWkl6ajBFQXdJd1Z6RVUKTUJJR0ExVUVDaE1MYTI1aGRHbDJaUzVrWlhZeFB6QTlCZ05WQkFNVE5uUmxhM1J2YmkxMGNtbG5aMlZ5Y3kxagpiM0psTFdsdWRHVnlZMlZ3ZEc5eWN5NTBaV3QwYjI0dGNHbHdaV3hwYm1WekxuTjJZekFnRncweU5UQTVNVGt4Ck1EQTJOVEJhR0E4eU1USTFNRGd5TmpFd01EWTFNRm93VnpFVU1CSUdBMVVFQ2hNTGEyNWhkR2wyWlM1a1pYWXgKUHpBOUJnTlZCQU1UTm5SbGEzUnZiaTEwY21sbloyVnljeTFqYjNKbExXbHVkR1Z5WTJWd2RHOXljeTUwWld0MApiMjR0Y0dsd1pXeHBibVZ6TG5OMll6QlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQTBJQUJFd3ZKTytPCmk3VDhlU215bGdlZk9RNmdodjFTSmlXb3ZmdG1NdDNzRVhMa0ZyVDQvQTlhcXNWWkp3d3lteU15L0JyTE9CS1EKckZaWTYyNVhMdFBFNTAramdnRkVNSUlCUURBT0JnTlZIUThCQWY4RUJBTUNBb1F3SFFZRFZSMGxCQll3RkFZSQpLd1lCQlFVSEF3RUdDQ3NHQVFVRkJ3TUNNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGQVpDCkhPbDI0Lyt4TE94dU5YekFLVkg0ckZEaU1JSGVCZ05WSFJFRWdkWXdnZE9DSVhSbGEzUnZiaTEwY21sbloyVnkKY3kxamIzSmxMV2x1ZEdWeVkyVndkRzl5YzRJeWRHVnJkRzl1TFhSeWFXZG5aWEp6TFdOdmNtVXRhVzUwWlhKagpaWEIwYjNKekxuUmxhM1J2Ymkxd2FYQmxiR2x1WlhPQ05uUmxhM1J2YmkxMGNtbG5aMlZ5Y3kxamIzSmxMV2x1CmRHVnlZMlZ3ZEc5eWN5NTBaV3QwYjI0dGNHbHdaV3hwYm1WekxuTjJZNEpDZEdWcmRHOXVMWFJ5YVdkblpYSnoKTFdOdmNtVXRhVzUwWlhKalpYQjBiM0p6TG5SbGEzUnZiaTF3YVhCbGJHbHVaWE11YzNaakxteGxibWQ2TG14dgpZMkZzTUFvR0NDcUdTTTQ5QkFNQ0Ewa0FNRVlDSVFDdDBYUW9aeU5iY0VIc2VzOHE3eUdxY2JDVTE0T1JtUlZNCjNUVEJzemY5VWdJaEFLZ2NURlNYeDBIY2o1SFZkSkVTNTkrR0hLcGdBdEZ5WEdDQzZpb2lIUVZECi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: tekton-triggers-core-interceptors
+      namespace: tekton-pipelines
+      path: gitlab
+      port: 8443
+status:
+  address:
+    url: https://tekton-triggers-core-interceptors.tekton-pipelines.svc:8443/gitlab
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: ClusterInterceptor
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"triggers.tekton.dev/v1alpha1","kind":"ClusterInterceptor","metadata":{"annotations":{},"labels":{"server/type":"https"},"name":"slack"},"spec":{"clientConfig":{"service":{"name":"tekton-triggers-core-interceptors","namespace":"tekton-pipelines","path":"slack","port":8443}}}}
+
+  creationTimestamp: '2025-09-19T10:06:21Z'
+  generation: 2
+  labels:
+    server/type: https
+  name: slack
+  resourceVersion: '2041'
+  uid: b5efa808-88dc-41d6-a428-a158f7009264
+spec:
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5akNDQXB1Z0F3SUJBZ0lSQUlRSDI1dGpHY29lOVRwQjB5Q0NNMG93Q2dZSUtvWkl6ajBFQXdJd1Z6RVUKTUJJR0ExVUVDaE1MYTI1aGRHbDJaUzVrWlhZeFB6QTlCZ05WQkFNVE5uUmxhM1J2YmkxMGNtbG5aMlZ5Y3kxagpiM0psTFdsdWRHVnlZMlZ3ZEc5eWN5NTBaV3QwYjI0dGNHbHdaV3hwYm1WekxuTjJZekFnRncweU5UQTVNVGt4Ck1EQTJOVEJhR0E4eU1USTFNRGd5TmpFd01EWTFNRm93VnpFVU1CSUdBMVVFQ2hNTGEyNWhkR2wyWlM1a1pYWXgKUHpBOUJnTlZCQU1UTm5SbGEzUnZiaTEwY21sbloyVnljeTFqYjNKbExXbHVkR1Z5WTJWd2RHOXljeTUwWld0MApiMjR0Y0dsd1pXeHBibVZ6TG5OMll6QlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQTBJQUJFd3ZKTytPCmk3VDhlU215bGdlZk9RNmdodjFTSmlXb3ZmdG1NdDNzRVhMa0ZyVDQvQTlhcXNWWkp3d3lteU15L0JyTE9CS1EKckZaWTYyNVhMdFBFNTAramdnRkVNSUlCUURBT0JnTlZIUThCQWY4RUJBTUNBb1F3SFFZRFZSMGxCQll3RkFZSQpLd1lCQlFVSEF3RUdDQ3NHQVFVRkJ3TUNNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGQVpDCkhPbDI0Lyt4TE94dU5YekFLVkg0ckZEaU1JSGVCZ05WSFJFRWdkWXdnZE9DSVhSbGEzUnZiaTEwY21sbloyVnkKY3kxamIzSmxMV2x1ZEdWeVkyVndkRzl5YzRJeWRHVnJkRzl1TFhSeWFXZG5aWEp6TFdOdmNtVXRhVzUwWlhKagpaWEIwYjNKekxuUmxhM1J2Ymkxd2FYQmxiR2x1WlhPQ05uUmxhM1J2YmkxMGNtbG5aMlZ5Y3kxamIzSmxMV2x1CmRHVnlZMlZ3ZEc5eWN5NTBaV3QwYjI0dGNHbHdaV3hwYm1WekxuTjJZNEpDZEdWcmRHOXVMWFJ5YVdkblpYSnoKTFdOdmNtVXRhVzUwWlhKalpYQjBiM0p6TG5SbGEzUnZiaTF3YVhCbGJHbHVaWE11YzNaakxteGxibWQ2TG14dgpZMkZzTUFvR0NDcUdTTTQ5QkFNQ0Ewa0FNRVlDSVFDdDBYUW9aeU5iY0VIc2VzOHE3eUdxY2JDVTE0T1JtUlZNCjNUVEJzemY5VWdJaEFLZ2NURlNYeDBIY2o1SFZkSkVTNTkrR0hLcGdBdEZ5WEdDQzZpb2lIUVZECi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: tekton-triggers-core-interceptors
+      namespace: tekton-pipelines
+      path: slack
+      port: 8443
+status:
+  address:
+    url: https://tekton-triggers-core-interceptors.tekton-pipelines.svc:8443/slack

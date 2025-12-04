@@ -1,0 +1,51 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"triggers.tekton.dev/v1beta1","kind":"TriggerBinding","metadata":{"annotations":{},"name":"pr-check-binding","namespace":"cicd-bitbucket"},"spec":{"params":[{"name":"git-url","value":"$(body.repository.links.html.href)"},{"name":"source-branch","value":"$(body.pullrequest.source.branch.name)"},{"name":"source-commit","value":"$(body.pullrequest.source.commit.hash)"},{"name":"pr-id","value":"$(body.pullrequest.id)"},{"name":"workspace-name","value":"$(body.repository.workspace.slug)"},{"name":"repository-name","value":"$(body.repository.name)"}]}}
+
+  creationTimestamp: '2025-09-19T11:19:27Z'
+  generation: 1
+  name: pr-check-binding
+  namespace: cicd-bitbucket
+  resourceVersion: '12864'
+  uid: 39675d77-d10a-48a1-9238-8f8d03ec75c2
+spec:
+  params:
+    - name: git-url
+      value: $(body.repository.links.html.href)
+    - name: source-branch
+      value: $(body.pullrequest.source.branch.name)
+    - name: source-commit
+      value: $(body.pullrequest.source.commit.hash)
+    - name: pr-id
+      value: $(body.pullrequest.id)
+    - name: workspace-name
+      value: $(body.repository.workspace.slug)
+    - name: repository-name
+      value: $(body.repository.name)
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"triggers.tekton.dev/v1beta1","kind":"TriggerBinding","metadata":{"annotations":{},"name":"publish-binding","namespace":"cicd-bitbucket"},"spec":{"params":[{"name":"git-url","value":"$(body.repository.links.html.href)"},{"name":"source-commit","value":"$(body.push.changes[0].new.target.hash)"},{"name":"workspace-name","value":"$(body.repository.workspace.slug)"},{"name":"repository-name","value":"$(body.repository.name)"}]}}
+
+  creationTimestamp: '2025-09-19T11:19:41Z'
+  generation: 1
+  name: publish-binding
+  namespace: cicd-bitbucket
+  resourceVersion: '12902'
+  uid: 3031fd99-343c-46ee-9704-df94edc0fbcf
+spec:
+  params:
+    - name: git-url
+      value: $(body.repository.links.html.href)
+    - name: source-commit
+      value: $(body.push.changes[0].new.target.hash)
+    - name: workspace-name
+      value: $(body.repository.workspace.slug)
+    - name: repository-name
+      value: $(body.repository.name)

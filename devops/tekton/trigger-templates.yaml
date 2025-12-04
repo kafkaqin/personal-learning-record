@@ -1,0 +1,84 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"triggers.tekton.dev/v1beta1","kind":"TriggerTemplate","metadata":{"annotations":{},"name":"pr-check-template","namespace":"cicd-bitbucket"},"spec":{"params":[{"name":"git-url"},{"name":"source-branch"},{"name":"source-commit"},{"name":"pr-id"},{"name":"workspace-name"},{"name":"repository-name"}],"resourcetemplates":[{"apiVersion":"tekton.dev/v1beta1","kind":"PipelineRun","metadata":{"generateName":"pr-check-run-","labels":{"pr-id":"$(tt.params.pr-id)","tekton.dev/pipeline":"pr-check-pipeline"},"namespace":"cicd-bitbucket"},"spec":{"params":[{"name":"git-url","value":"$(tt.params.git-url)"},{"name":"commit-hash","value":"$(tt.params.source-commit)"},{"name":"pr-id","value":"$(tt.params.pr-id)"},{"name":"workspace-name","value":"$(tt.params.workspace-name)"},{"name":"repository-name","value":"$(tt.params.repository-name)"}],"pipelineRef":{"name":"pr-check-pipeline"}}}]}}
+
+  creationTimestamp: '2025-09-19T10:06:34Z'
+  generation: 1
+  name: pr-check-template
+  namespace: cicd-bitbucket
+  resourceVersion: '1388'
+  uid: 6fd06185-23ec-4ace-a40e-6f91aca00dcd
+spec:
+  params:
+    - name: git-url
+    - name: source-branch
+    - name: source-commit
+    - name: pr-id
+    - name: workspace-name
+    - name: repository-name
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: pr-check-run-
+        labels:
+          pr-id: $(tt.params.pr-id)
+          tekton.dev/pipeline: pr-check-pipeline
+        namespace: cicd-bitbucket
+      spec:
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: commit-hash
+            value: $(tt.params.source-commit)
+          - name: pr-id
+            value: $(tt.params.pr-id)
+          - name: workspace-name
+            value: $(tt.params.workspace-name)
+          - name: repository-name
+            value: $(tt.params.repository-name)
+        pipelineRef:
+          name: pr-check-pipeline
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"triggers.tekton.dev/v1beta1","kind":"TriggerTemplate","metadata":{"annotations":{},"name":"publish-template","namespace":"cicd-bitbucket"},"spec":{"params":[{"name":"git-url"},{"name":"source-commit"},{"name":"workspace-name"},{"name":"repository-name"}],"resourcetemplates":[{"apiVersion":"tekton.dev/v1beta1","kind":"PipelineRun","metadata":{"generateName":"publish-run-","labels":{"tekton.dev/pipeline":"publish-pipeline"},"namespace":"cicd-bitbucket"},"spec":{"params":[{"name":"git-url","value":"$(tt.params.git-url)"},{"name":"commit-hash","value":"$(tt.params.source-commit)"},{"name":"workspace-name","value":"$(tt.params.workspace-name)"},{"name":"repository-name","value":"$(tt.params.repository-name)"}],"pipelineRef":{"name":"publish-pipeline"}}}]}}
+
+  creationTimestamp: '2025-09-19T11:16:50Z'
+  generation: 1
+  name: publish-template
+  namespace: cicd-bitbucket
+  resourceVersion: '12412'
+  uid: b490fc15-0b6d-427b-81e5-bba31a8559e2
+spec:
+  params:
+    - name: git-url
+    - name: source-commit
+    - name: workspace-name
+    - name: repository-name
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: publish-run-
+        labels:
+          tekton.dev/pipeline: publish-pipeline
+        namespace: cicd-bitbucket
+      spec:
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: commit-hash
+            value: $(tt.params.source-commit)
+          - name: workspace-name
+            value: $(tt.params.workspace-name)
+          - name: repository-name
+            value: $(tt.params.repository-name)
+        pipelineRef:
+          name: publish-pipeline

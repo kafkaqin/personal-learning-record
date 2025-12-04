@@ -49,6 +49,13 @@ data:
             prefer_udp
         }
     }
+    cfusersh5.kongeinhehge.xyz:53 {
+        errors
+        cache 30
+        forward . 47.107.143.93 {
+            prefer_udp
+        }
+    }
 kind: ConfigMap
 metadata:
   creationTimestamp: "2025-03-12T05:31:26Z"
