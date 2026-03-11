@@ -18,3 +18,5 @@ https://plantuml.com/zh/json
 # 进到容器里
 openclaw devices list
 openclaw devices approve
+
+# http://127.0.0.1:18789/
